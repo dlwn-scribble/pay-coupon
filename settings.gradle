@@ -1,0 +1,5 @@
+rootProject.name = 'pay-coupon'
+
+include 'pay-coupon-api'
+include 'pay-coupon-app'
+
