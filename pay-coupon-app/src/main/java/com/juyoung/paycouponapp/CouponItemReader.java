@@ -3,6 +3,8 @@ package com.juyoung.paycouponapp;
 import com.juyoung.paycouponapp.model.entity.Coupon;
 import com.juyoung.paycouponapp.repository.CouponRepository;
 import org.springframework.batch.item.database.AbstractPagingItemReader;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,11 +29,12 @@ public class CouponItemReader extends AbstractPagingItemReader<Coupon> {
         } else {
             results.clear();
         }
-
+        Pageable pageable = PageRequest.of(0, this.getPageSize());
         List<Coupon> coupons = couponRepository
-                .findByExpireDateAndUsedAndAlertDate(LocalDate.now().atStartOfDay().plusDays(this.days)
+                .findAllByExpireDateAndUsedAndAlertDate(LocalDate.now().atStartOfDay().plusDays(this.days)
                         , false
-                        , null);
+                        , null
+                        , pageable);
         System.out.println(String.format(">>>[만료 예정 쿠폰] %d 개 데이터", coupons.size()));
         results.addAll(coupons);
     }
