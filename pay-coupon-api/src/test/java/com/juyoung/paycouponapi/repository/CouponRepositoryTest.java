@@ -1,5 +1,6 @@
 package com.juyoung.paycouponapi.repository;
 
+import com.juyoung.paycouponapi.config.QuerydslConfig;
 import com.juyoung.paycouponapi.model.entity.Coupon;
 import com.juyoung.paycouponapi.model.entity.User;
 import com.juyoung.paycouponapi.model.projection.OfferedCoupon;
@@ -9,7 +10,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
@@ -19,8 +22,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
+@Import(QuerydslConfig.class)
 class CouponRepositoryTest {
     static final Logger logger = LoggerFactory.getLogger(CouponRepositoryTest.class);
 

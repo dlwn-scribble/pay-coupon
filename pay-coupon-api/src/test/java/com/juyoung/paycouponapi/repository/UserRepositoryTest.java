@@ -1,18 +1,21 @@
 package com.juyoung.paycouponapi.repository;
 
+import com.juyoung.paycouponapi.config.QuerydslConfig;
 import com.juyoung.paycouponapi.model.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
+@Import(QuerydslConfig.class)
 class UserRepositoryTest {
     static final Logger logger = LoggerFactory.getLogger(UserRepositoryTest.class);
 
