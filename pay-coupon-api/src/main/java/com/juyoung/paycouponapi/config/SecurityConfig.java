@@ -57,15 +57,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         );
     }
-
-    //MVC 테스트 를 위한 Spring Security 설정
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        auth.inMemoryAuthentication()
-                .passwordEncoder(encoder)
-                .withUser("spring")
-                .password(encoder.encode("secret"))
-                .roles("USER");
-    }
 }

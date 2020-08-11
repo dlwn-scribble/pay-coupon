@@ -1,14 +1,17 @@
 package com.juyoung.paycouponapi.controller;
 
+import com.juyoung.paycouponapi.config.SecurityConfig;
 import com.juyoung.paycouponapi.exception.BusinessErrorCode;
 import com.juyoung.paycouponapi.exception.BusinessException;
+import com.juyoung.paycouponapi.security.TokenProvider;
 import com.juyoung.paycouponapi.service.CouponServiceImpl;
 import com.juyoung.paycouponapi.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -20,8 +23,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(controllers = CouponController.class)
+@Import({SecurityConfig.class, TokenProvider.class})
 class CouponControllerTest {
 
     @Autowired
@@ -47,7 +50,7 @@ class CouponControllerTest {
     }
 
     //region 쿠론 생성
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Created() throws Exception {
         mockMvc.perform(post("/api/v1/coupons")
@@ -56,7 +59,7 @@ class CouponControllerTest {
 
     }
 
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Created_Without_Period() throws Exception {
 
@@ -67,7 +70,7 @@ class CouponControllerTest {
     //endregion
 
     //region 쿠폰 지급
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Not_Acceptable_For_Offering_With_Invalid_User() throws Exception {
         when(userService.getUserByUserId(any(String.class))).thenReturn(null);
@@ -78,7 +81,7 @@ class CouponControllerTest {
 
     }
 
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Not_Acceptable_For_Offering_Nothing() throws Exception {
         when(userService.getUserByUserId(any(String.class))).thenReturn(null);
@@ -91,7 +94,7 @@ class CouponControllerTest {
     //endregion
 
     //region 쿠폰 사용
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Not_Found_For_Using_Invalid_Coupon() throws Exception {
         when(couponService.setCouponUsed(any(String.class)))
@@ -100,7 +103,7 @@ class CouponControllerTest {
                 .param("couponId", "test")).andExpect(status().isNotFound());
     }
 
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Not_Acceptable_For_Using_Not_Offered_Coupon() throws Exception {
         when(couponService.setCouponUsed(any(String.class)))
@@ -111,7 +114,7 @@ class CouponControllerTest {
     //endregion
 
     //region 쿠폰 사용 취소
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Not_Found_For_Cancelling_Invalid_Coupon() throws Exception {
         when(couponService.setCouponCanceled(any(String.class)))
@@ -120,7 +123,7 @@ class CouponControllerTest {
                 .param("couponId", "test")).andExpect(status().isNotFound());
     }
 
-    @WithMockUser(username="spring")
+    @WithMockUser
     @Test
     void Should_Be_Not_Acceptable_For_Cancelling_Not_Offered_Coupon() throws Exception {
         when(couponService.setCouponCanceled(any(String.class)))
